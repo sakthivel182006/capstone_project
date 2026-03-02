@@ -1,9 +1,14 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.LoginRequest;
+import com.example.backend.dto.LoginResponse;
 import com.example.backend.dto.UserDTO;
 import com.example.backend.model.User;
 import com.example.backend.service.UserService;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -38,4 +43,30 @@ public class UserController {
         userService.deleteUser(id);
         return "User deleted successfully";
     }
+
+        @PostMapping("/login")
+        public LoginResponse login(@RequestBody LoginRequest loginRequest) {
+
+        return userService.loginUser(
+                loginRequest.getEmail(),
+                loginRequest.getPassword()
+        );
+        }
+
+
+        @GetMapping("/validate")
+public String validateToken(@RequestParam String token) {
+
+    boolean isValid = userService.validateToken(token);
+
+    if (!isValid) {
+        throw new ResponseStatusException(
+                HttpStatus.UNAUTHORIZED,
+                "Invalid or expired token"
+        );
+    }
+
+    return "Token is valid";
+}
+
 }
