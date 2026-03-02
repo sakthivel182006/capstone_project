@@ -97,4 +97,24 @@ public class UserService {
     public boolean validateToken(String token) {
         return jwtUtil.validateToken(token);
     }
+
+
+    public User updateUserRole(String id, String role) {
+
+    User user = userRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+    try {
+        UserRole newRole = UserRole.valueOf(role.toUpperCase());
+        user.setRole(newRole);
+    } catch (IllegalArgumentException e) {
+        throw new RuntimeException("Invalid role value. Allowed values: USER, ADMIN");
+    }
+
+    return userRepository.save(user);
+}
+
+            public void deleteAllUsers() {
+    userRepository.deleteAll();
+        }
 }

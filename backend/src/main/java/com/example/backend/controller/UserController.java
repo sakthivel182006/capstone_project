@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.LoginRequest;
 import com.example.backend.dto.LoginResponse;
+import com.example.backend.dto.RoleUpdateDTO;
 import com.example.backend.dto.UserDTO;
 import com.example.backend.model.User;
 import com.example.backend.service.UserService;
@@ -68,5 +69,24 @@ public String validateToken(@RequestParam String token) {
 
     return "Token is valid";
 }
+
+
+
+        @PutMapping("/{id}/role")
+        public User updateRole(@PathVariable String id,
+                            @RequestBody RoleUpdateDTO roleUpdateDTO) {
+
+            return userService.updateUserRole(id, roleUpdateDTO.getRole());
+        }
+
+
+
+            @DeleteMapping("/delete-all")
+    public String deleteAllUsers() {
+
+        userService.deleteAllUsers();
+
+        return "All users deleted successfully";
+    }
 
 }
