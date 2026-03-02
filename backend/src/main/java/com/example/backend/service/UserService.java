@@ -24,7 +24,6 @@ public class UserService {
         this.jwtUtil = jwtUtil;
     }
 
-    // ✅ REGISTER
     public User registerUser(UserDTO userDTO) {
 
         if (userRepository.existsByEmail(userDTO.getEmail())) {
@@ -43,12 +42,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    // ✅ GET ALL
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    // ✅ GET BY ID
     public User getUserById(String id) {
         return userRepository.findById(id)
                 .orElseThrow(() ->
@@ -56,17 +53,14 @@ public class UserService {
                 );
     }
 
-    // ✅ DELETE
     public void deleteUser(String id) {
         userRepository.deleteById(id);
     }
 
-    // ✅ LOGIN
     public LoginResponse loginUser(String email, String password) {
 
         User user = userRepository.findByEmail(email).orElse(null);
 
-        // ❌ Email not found
         if (user == null) {
             throw new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED,
@@ -82,7 +76,6 @@ public class UserService {
             );
         }
 
-        // ✅ Generate token
         String token = jwtUtil.generateToken(user.getEmail());
 
         return new LoginResponse(
